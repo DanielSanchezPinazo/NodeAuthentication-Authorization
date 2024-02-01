@@ -1,6 +1,6 @@
 import { register } from 'module';
 import { UserModel } from '../../data';
-import { CustomError, UserEntity } from '../../domain';
+import { CustomError, LoginUserDto, UserEntity } from '../../domain';
 import { RegisterUserDto } from '../../domain/dtos/auth/register-user.dto';
 import { json } from 'stream/consumers';
 import { bcryptAdapter } from '../../config';
@@ -37,6 +37,24 @@ export class AuthService {
             
         } catch ( error ) {
             throw CustomError.internalServer( `${error}` );
+        };
+    };
+
+    public async loginUser( loginUserDto: LoginUserDto ) {
+
+        // Findone para verificar si existe
+        const user = await UserModel.findOne( {email: loginUserDto.email} );
+        if ( !user ) throw CustomError.badRequest("Email not exists.");
+
+        // isMatch....bcrypt.compare(123456, owuefxowucnhfñowñexfu)
+        const isMatching = bcryptAdapter.compare( loginUserDto.password, user.password );
+        if ( !isMatching) throw CustomError.badRequest("Password is not correct.");
+
+        const { password, ...findedUser } = UserEntity.fromObject( user );
+
+        return {  
+           user:  findedUser , 
+           token: "ABC",
         };
     };
 };
