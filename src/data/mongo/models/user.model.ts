@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
         required: [ true, "Email is required."],
         unique: true, // esto es para indicar que no se puede repetir
     },
+    emailValidated: {
+        type: Boolean,
+        default: false,
+    },
     password: {
         type: String,
         required: [ true, "Password is required."],// es requerido y añadimos un mensaje de error
@@ -22,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: ["USER_ROLE"],
+        default: "USER_ROLE",
         enum: [ "ADMIN_ROLE", "USER_ROLE" ],
     }
 });
