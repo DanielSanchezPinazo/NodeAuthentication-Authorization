@@ -7,6 +7,7 @@ const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: [ true, "Name is required."],// es requerido y añadimos un mensaje de error
+        unique : true,
     },
     available: {
         type: Boolean,
